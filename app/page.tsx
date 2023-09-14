@@ -1,7 +1,9 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
-    <main>
-      <h1>HELLO</h1>
-    </main>
+    <Link href='/reservation'>
+      Забронировать номер
+    </Link>
   )
 }

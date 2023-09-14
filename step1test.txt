@@ -1,0 +1,251 @@
+// const MultiStepForm = () => {
+//   return (
+//     <form>
+//       <input type='text' placeholder='hello'/>
+//     </form>
+//   )
+// };
+//
+// export default MultiStepForm;
+'use client'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  adults: z.number().min(1).positive().default(1),
+  children5to12: z.number().positive().optional().default(0),
+  childrenUnder5: z.number().positive().optional().default(0),
+  roomType: z.enum(['Эконом', 'Стандарт', 'Люкс']).default('Эконом'),
+  nights: z.number().min(1).positive().default(1),
+  insurance: z.boolean().optional().default(false),
+});
+
+type FormData = z.infer<typeof schema>;
+
+const FormStep1 = () => {
+  const { register, handleSubmit, control, formState } = useForm<FormData>({
+    mode: 'onBlur',
+    resolver: zodResolver(schema),
+  });
+  const { errors } = formState;
+  console.log('formState', formState)
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    console.log(data);
+    // пересчет стоимости заказа и переход к следующему шагу
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl mx-auto">
+      {/*<div className="mb-4">*/}
+      {/*  <label htmlFor="adults" className="block mb-1 font-medium text-gray-700">Количество взрослых</label>*/}
+      {/*  <input type="number" id="adults" {...register('adults', { valueAsNumber: true })}*/}
+      {/*         className={`w-full px-3 py-2 border rounded-md ${errors.adults*/}
+      {/*           ? 'border-red-500'*/}
+      {/*           : 'border-gray-300'}`}/>*/}
+      {/*  {errors.adults && <span className="text-sm text-red-500">{errors.adults.message}</span>}*/}
+      {/*</div>*/}
+      <div className="mb-4">
+        <label htmlFor="adults" className="block mb-1 font-medium text-gray-700">Количество взрослых</label>
+        <Controller
+          name="adults"
+          control={control}
+          // defaultValue={1}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <input
+              type="number"
+              id="adults"
+              {...field}
+              value={field.value || ''}
+              className={`w-full px-3 py-2 border rounded-md ${errors.adults
+                ? 'border-red-500'
+                : 'border-gray-300'}`}
+            />
+          )}
+        />
+        {errors.adults && <span className="text-sm text-red-500">Это поле обязательно для заполнения</span>}
+      </div>
+      <div className="mb-4">
+        <label htmlFor="children5to12" className="block mb-1 font-medium text-gray-700">Количество детей от 5 до 12
+          лет</label>
+        <Controller
+          name="children5to12"
+          control={control}
+          // defaultValue={1}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <input
+              type="number"
+              id="children5to12"
+              {...field}
+              value={field.value || ''}
+              className={`w-full px-3 py-2 border rounded-md ${errors.children5to12
+                ? 'border-red-500'
+                : 'border-gray-300'}`}
+            />
+          )}
+        />
+        {errors.children5to12 && <span className="text-sm text-red-500">Это поле обязательно для заполнения</span>}
+      </div>
+      {/*<div className="mb-4">*/}
+      {/*  <label htmlFor="children5to12" className="block mb-1 font-medium text-gray-700">Количество детей от 5 до 12*/}
+      {/*    лет</label>*/}
+      {/*  <input type="number" id="children5to12" {...register('children5to12')}*/}
+      {/*         className={`w-full px-3 py-2 border rounded-md ${errors.children5to12*/}
+      {/*           ? 'border-red-500'*/}
+      {/*           : 'border-gray-300'}`}/>*/}
+      {/*  {errors.children5to12 && <span className="text-sm text-red-500">{errors.children5to12.message}</span>}*/}
+      {/*</div>*/}
+      <div className="mb-4">
+        <label htmlFor="childrenUnder5" className="block mb-1 font-medium text-gray-700">Количество детей до 5
+          лет</label>
+        <Controller
+          name="childrenUnder5"
+          control={control}
+          // defaultValue={1}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <input
+              type="number"
+              id="childrenUnder5"
+              {...field}
+              value={field.value || ''}
+              className={`w-full px-3 py-2 border rounded-md ${errors.childrenUnder5
+                ? 'border-red-500'
+                : 'border-gray-300'}`}
+            />
+          )}
+        />
+        {errors.childrenUnder5 && <span className="text-sm text-red-500">Это поле обязательно для заполнения</span>}
+      </div>
+      {/*<div className="mb-4">*/}
+      {/*  <label htmlFor="childrenUnder5" className="block mb-1 font-medium text-gray-700">Количество детей до 5*/}
+      {/*    лет</label>*/}
+      {/*  <input type="number" id="childrenUnder5" {...register('childrenUnder5')}*/}
+      {/*         className={`w-full px-3 py-2 border rounded-md ${errors.childrenUnder5*/}
+      {/*           ? 'border-red-500'*/}
+      {/*           : 'border-gray-300'}`}/>*/}
+      {/*  {errors.childrenUnder5 && <span className="text-sm text-red-500">{errors.childrenUnder5.message}</span>}*/}
+      {/*</div>*/}
+      {/*<div className="mb-4">*/}
+      {/*  <label htmlFor="roomType" className="block mb-1 font-medium text-gray-700">Тип номера</label>*/}
+      {/*  <select id="roomType" {...register('roomType')} className={`w-full px-3 py-2 border rounded-md ${errors.roomType*/}
+      {/*    ? 'border-red-500'*/}
+      {/*    : 'border-gray-300'}`}>*/}
+      {/*    <option value="Эконом">Эконом</option>*/}
+      {/*    <option value="Стандарт">Стандарт</option>*/}
+      {/*    <option value="Люкс">Люкс</option>*/}
+      {/*  </select>*/}
+      {/*  {errors.roomType && <span className="text-sm text-red-500">{errors.roomType.message}</span>}*/}
+      {/*</div>*/}
+      <div className="mb-4">
+        <Controller
+          name="roomType"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <>
+              <span className="block mb-1 font-medium text-gray-700">Тип номера</span>
+              <div className="flex items-center space-x-4">
+                <label htmlFor="roomType-economy" className="flex items-center space-x-2">
+                  <input type="radio" id="roomType-economy" {...field} value="Эконом" className="mr-2"/>
+                  <span>Эконом</span>
+                </label>
+                <label htmlFor="roomType-standard" className="flex items-center space-x-2">
+                  <input type="radio" id="roomType-standard" {...field} value="Стандарт" className="mr-2"/>
+                  <span>Стандарт</span>
+                </label>
+                <label htmlFor="roomType-luxury" className="flex items-center space-x-2">
+                  <input type="radio" id="roomType-luxury" {...field} value="Люкс" className="mr-2"/>
+                  <span>Люкс</span>
+                </label>
+              </div>
+            </>
+          )}
+        />
+        {errors.roomType && <span className="text-sm text-red-500">{errors.roomType.message}</span>}
+      </div>
+      {/*<div className="mb-4">*/}
+      {/*  <span className="block mb-1 font-medium text-gray-700">Тип номера</span>*/}
+      {/*  <div className="flex items-center space-x-4">*/}
+      {/*    <label htmlFor="roomType-economy" className="flex items-center space-x-2">*/}
+      {/*      <input type="radio" id="roomType-economy" {...register('roomType')} value="Эконом" className="mr-2"/>*/}
+      {/*      <span>Эконом</span>*/}
+      {/*    </label>*/}
+      {/*    <label htmlFor="roomType-standard" className="flex items-center space-x-2">*/}
+      {/*      <input type="radio" id="roomType-standard" {...register('roomType')} value="Стандарт" className="mr-2"/>*/}
+      {/*      <span>Стандарт</span>*/}
+      {/*    </label>*/}
+      {/*    <label htmlFor="roomType-luxury" className="flex items-center space-x-2">*/}
+      {/*      <input type="radio" id="roomType-luxury" {...register('roomType')} value="Люкс" className="mr-2"/>*/}
+      {/*      <span>Люкс</span>*/}
+      {/*    </label>*/}
+      {/*  </div>*/}
+      {/*  {errors.roomType && <span className="text-sm text-red-500">{errors.roomType.message}</span>}*/}
+      {/*</div>*/}
+      <div className="mb-4">
+        <label htmlFor="nights" className="block mb-1 font-medium text-gray-700">Количество ночей</label>
+        <Controller
+          name="nights"
+          control={control}
+          // defaultValue={1}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <input
+              type="number"
+              id="nights"
+              {...field}
+              value={field.value || ''}
+              className={`w-full px-3 py-2 border rounded-md ${errors.nights
+                ? 'border-red-500'
+                : 'border-gray-300'}`}
+            />
+          )}
+        />
+        {errors.nights && <span className="text-sm text-red-500">Это поле обязательно для заполнения</span>}
+      </div>
+      {/*<div className="mb-4">*/}
+      {/*  <label htmlFor="nights" className="block mb-1 font-medium text-gray-700">Количество ночей</label>*/}
+      {/*  <input type="number" id="nights" {...register('nights')}*/}
+      {/*         className={`w-full px-3 py-2 border rounded-md ${errors.nights*/}
+      {/*           ? 'border-red-500'*/}
+      {/*           : 'border-gray-300'}`}/>*/}
+      {/*  {errors.nights && <span className="text-sm text-red-500">{errors.nights.message}</span>}*/}
+      {/*</div>*/}
+      <div className="mb-4">
+        <Controller
+          name="insurance"
+          control={control}
+          rules={{ required: false }}
+          render={({ field }) => (
+            <div className="mb-4">
+              <label htmlFor="insurance" className="inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="insurance" {...field}
+                       className={`mr-2 border rounded ${errors.insurance ? 'border-red-500' : 'border-gray-300'}`}/>
+                <span className="text-sm font-medium text-gray-700">Страховка</span>
+              </label>
+            </div>
+          )}
+        />
+        {errors.insurance && <span className="text-sm text-red-500">{errors.insurance.message}</span>}
+      </div>
+
+      {/*<div className="mb-4">*/}
+      {/*  <label htmlFor="insurance" className="inline-flex items-center cursor-pointer">*/}
+      {/*    <input type="checkbox" id="insurance" {...register('insurance')}*/}
+      {/*           className={`mr-2 border rounded ${errors.insurance ? 'border-red-500' : 'border-gray-300'}`}/>*/}
+      {/*    <span className="text-sm font-medium text-gray-700">Страховка</span>*/}
+      {/*  </label>*/}
+      {/*  {errors.insurance && <span className="text-sm text-red-500">{errors.insurance.message}</span>}*/}
+      {/*</div>*/}
+      <button type="submit"
+              className={`w-full py-2 text-white bg-blue-500 rounded-md ${!formState.isValid
+                ? 'opacity-50 cursor-not-allowed'
+                : ''}`}>Далее
+      </button>
+    </form>
+  );
+};
+
+export default FormStep1;

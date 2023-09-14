@@ -1,0 +1,96 @@
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+
+const schema = z.object({
+  name: z.string().min(3).max(50).required(),
+  email: z.string().email().required(),
+  age: z.number().min(18).max(99).required(),
+});
+
+export default function MultiStepForm() {
+  const [step, setStep] = useState(1);
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: '',
+      email: '',
+      age: '',
+    },
+  });
+
+  const onSubmit = (data) => {
+    console.log(data);
+    router.push('/success');
+  };
+
+  const nextStep = () => {
+    handleSubmit((data) => {
+      setStep((step) => step + 1);
+      router.push(`/step${step + 1}`);
+    })();
+  };
+
+  const prevStep = () => {
+    setStep((step) => step - 1);
+    router.push(`/step${step - 1}`);
+  };
+
+  const isPrevDisabled = step === 1;
+  const isNextDisabled = !Object.keys(errors).length;
+
+  const renderStep = () => {
+    switch (step) {
+      case 1:
+        return (
+          <>
+            <label htmlFor="name">Name</label>
+            <input type="text" {...register('name')} />
+            {errors.name && <span>{errors.name.message}</span>}
+          </>
+        );
+      case 2:
+        return (
+          <>
+            <label htmlFor="email">Email</label>
+            <input type="email" {...register('email')} />
+            {errors.email && <span>{errors.email.message}</span>}
+          </>
+        );
+      case 3:
+        return (
+          <>
+            <label htmlFor="age">Age</label>
+            <input type="number" {...register('age')} />
+            {errors.age && <span>{errors.age.message}</span>}
+          </>
+        );
+        default:
+                return null;
+            }
+          };
+
+          return (
+              <form onSubmit={handleSubmit(onSubmit)}>
+                {renderStep()}
+                <button type="button" onClick={prevStep} disabled={isPrevDisabled}>
+                  Prev
+                </button>
+                <button type="button" onClick={nextStep} disabled={isNextDisabled}>
+                  Next
+                </button>
+                {step === 3 && (
+                  <button type="submit" disabled={isNextDisabled}>
+                    Submit
+                  </button>
+                )}
+              </form>
+            );
+          }

@@ -1,0 +1,19 @@
+const OrderConfirmation = () => {
+  const handlePaymentClick = () => {
+    console.log('Sending payment data to server...');
+    setTimeout(() => {
+      console.log('Payment successful!');
+    }, 2000);
+  };
+
+  return (
+    <div className="max-w-xl mx-auto">
+      <h2 className="mb-4 font-bold text-xl">Заказ подтвержден</h2>
+      <p>Стоимость заказа: 10000 руб.</p>
+      <p>В том числе страховка: 1000 руб.</p>
+      <p>Номер телефона: +7 (999) 123-45-67</p>
+      <p>Дата рождения: 01.01.2000</p>
+      <button onClick={handlePaymentClick} className="mt-8 w-full py-2 text-white bg-blue-500 rounded-md">Оплатить</button>
+    </div>
+  );
+};
