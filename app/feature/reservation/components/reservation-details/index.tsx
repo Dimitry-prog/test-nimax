@@ -4,6 +4,7 @@ import { ReservationFormData } from "@/app/feature/reservation/validation";
 import { pickFieldsFromObj } from "@/app/utils/pickFieldsFromObj";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useReservationData } from "@/app/feature/reservation/store";
 
 const ReservationDetails = () => {
   const {
@@ -15,6 +16,7 @@ const ReservationDetails = () => {
   const { errors } = formState;
   const reservationDetailsFormErrors = pickFieldsFromObj(errors, ["surname", "name", "children5to12", "patronymic", "phone", "birthday"]);
   const router = useRouter();
+  const updateFields = useReservationData(state => state.updateFields);
 
   const nextStep = async () => {
     const isValid = await trigger(["surname", "name", "children5to12", "patronymic", "phone", "birthday"]);
@@ -37,7 +39,11 @@ const ReservationDetails = () => {
               {...field}
               value={field.value || ''}
               onChange={(e) => {
+                const field = {
+                  [e.target.name]: e.target.value,
+                };
                 setValue('surname', e.target.value);
+                updateFields(field);
               }}
               className={`w-full px-3 py-2 border rounded-md ${errors.surname
                 ? 'border-red-500'
@@ -59,7 +65,11 @@ const ReservationDetails = () => {
               {...field}
               value={field.value || ''}
               onChange={(e) => {
+                const field = {
+                  [e.target.name]: e.target.value,
+                };
                 setValue('name', e.target.value);
+                updateFields(field);
               }}
               className={`w-full px-3 py-2 border rounded-md ${errors.name
                 ? 'border-red-500'
@@ -81,7 +91,11 @@ const ReservationDetails = () => {
               {...field}
               value={field.value || ''}
               onChange={(e) => {
+                const field = {
+                  [e.target.name]: e.target.value,
+                };
                 setValue('patronymic', e.target.value);
+                updateFields(field);
               }}
               className={`w-full px-3 py-2 border rounded-md ${errors.patronymic
                 ? 'border-red-500'
@@ -103,7 +117,11 @@ const ReservationDetails = () => {
               {...field}
               value={field.value || ''}
               onChange={(e) => {
+                const field = {
+                  [e.target.name]: e.target.value,
+                };
                 setValue('phone', e.target.value);
+                updateFields(field);
               }}
               className={`w-full px-3 py-2 border rounded-md ${errors.phone
                 ? 'border-red-500'
@@ -125,7 +143,11 @@ const ReservationDetails = () => {
               {...field}
               value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
               onChange={(e) => {
+                const field = {
+                  [e.target.name]: e.target.value,
+                };
                 setValue('birthday', new Date(e.target.value));
+                updateFields(field);
               }}
               className={`w-full px-3 py-2 border rounded-md ${errors.birthday
                 ? 'border-red-500'

@@ -3,6 +3,8 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useRouter } from "next/navigation";
 import { ReservationFormData } from "@/app/feature/reservation/validation";
 import { pickFieldsFromObj } from "@/app/utils/pickFieldsFromObj";
+import { useReservationData } from "@/app/feature/reservation/store";
+import ReservationPrice from "@/app/feature/reservation/components/reservation-price";
 
 const ReservationRoom = () => {
   const {
@@ -14,6 +16,7 @@ const ReservationRoom = () => {
   const { errors } = formState;
   const reservationRoomFormErrors = pickFieldsFromObj(errors, ["adults", "childrenUnder5", "children5to12", "roomType", "nights", "insurance"]);
   const router = useRouter();
+  const updateFields = useReservationData(state => state.updateFields);
 
   const nextStep = async () => {
     const isValid = await trigger(["adults", "childrenUnder5", "children5to12", "roomType", "nights", "insurance"]);
@@ -36,7 +39,11 @@ const ReservationRoom = () => {
               {...field}
               value={field.value || ''}
               onChange={(e) => {
+                const field = {
+                  [e.target.name]: parseInt(e.target.value),
+                };
                 setValue('adults', parseInt(e.target.value));
+                updateFields(field);
               }}
               className={`w-full px-3 py-2 border rounded-md ${errors.adults
                 ? 'border-red-500'
@@ -59,7 +66,11 @@ const ReservationRoom = () => {
               {...field}
               value={field.value || ''}
               onChange={(e) => {
+                const field = {
+                  [e.target.name]: parseInt(e.target.value),
+                };
                 setValue('children5to12', parseInt(e.target.value));
+                updateFields(field);
               }}
               className={`w-full px-3 py-2 border rounded-md ${errors.children5to12
                 ? 'border-red-500'
@@ -82,7 +93,11 @@ const ReservationRoom = () => {
               {...field}
               value={field.value || ''}
               onChange={(e) => {
+                const field = {
+                  [e.target.name]: parseInt(e.target.value),
+                };
                 setValue('childrenUnder5', parseInt(e.target.value));
+                updateFields(field);
               }}
               className={`w-full px-3 py-2 border rounded-md ${errors.childrenUnder5
                 ? 'border-red-500'
@@ -101,15 +116,30 @@ const ReservationRoom = () => {
               <span className="block mb-1 font-medium text-gray-700">Тип номера</span>
               <div className="flex items-center space-x-4">
                 <label htmlFor="roomType-economy" className="flex items-center space-x-2">
-                  <input type="radio" id="roomType-economy" {...field} value="Эконом" className="mr-2"/>
+                  <input type="radio" id="roomType-economy" {...field} value="Эконом" onChange={(e) => {
+                    const field = {
+                      [e.target.name]: e.target.value,
+                    };
+                    updateFields(field);
+                  }} className="mr-2"/>
                   <span>Эконом</span>
                 </label>
                 <label htmlFor="roomType-standard" className="flex items-center space-x-2">
-                  <input type="radio" id="roomType-standard" {...field} value="Стандарт" className="mr-2"/>
+                  <input type="radio" id="roomType-standard" {...field} value="Стандарт" onChange={(e) => {
+                    const field = {
+                      [e.target.name]: e.target.value,
+                    };
+                    updateFields(field);
+                  }} className="mr-2"/>
                   <span>Стандарт</span>
                 </label>
                 <label htmlFor="roomType-luxury" className="flex items-center space-x-2">
-                  <input type="radio" id="roomType-luxury" {...field} value="Люкс" className="mr-2"/>
+                  <input type="radio" id="roomType-luxury" {...field} value="Люкс" onChange={(e) => {
+                    const field = {
+                      [e.target.name]: e.target.value,
+                    };
+                    updateFields(field);
+                  }} className="mr-2"/>
                   <span>Люкс</span>
                 </label>
               </div>
@@ -130,7 +160,11 @@ const ReservationRoom = () => {
               {...field}
               value={field.value || ''}
               onChange={(e) => {
+                const field = {
+                  [e.target.name]: parseInt(e.target.value),
+                };
                 setValue('nights', parseInt(e.target.value));
+                updateFields(field);
               }}
               className={`w-full px-3 py-2 border rounded-md ${errors.nights
                 ? 'border-red-500'
@@ -148,9 +182,16 @@ const ReservationRoom = () => {
           render={({ field }) => (
             <div className="mb-4">
               <label htmlFor="insurance" className="inline-flex items-center cursor-pointer">
-                <input type="checkbox" id="insurance" {...field}
-                       value={field.value?.toString() || ''}
-                       className={`mr-2 border rounded ${errors.insurance ? 'border-red-500' : 'border-gray-300'}`}/>
+                <input
+                  type="checkbox" id="insurance" {...field}
+                  value={field.value?.toString() || ''}
+                  onChange={(e) => {
+                    const field = {
+                      [e.target.name]: e.target.checked,
+                    };
+                    updateFields(field);
+                  }}
+                  className={`mr-2 border rounded ${errors.insurance ? 'border-red-500' : 'border-gray-300'}`}/>
                 <span className="text-sm font-medium text-gray-700">Страховка</span>
               </label>
             </div>
@@ -158,6 +199,7 @@ const ReservationRoom = () => {
         />
         {errors.insurance && <span className="text-sm text-red-500">{errors.insurance.message}</span>}
       </div>
+      <ReservationPrice title='Итого:'/>
       <button
         onClick={nextStep}
         type="button"

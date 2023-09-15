@@ -4,6 +4,7 @@ import { SubmitHandler, useFormContext } from "react-hook-form";
 import { ReservationFormData } from "@/app/feature/reservation/validation";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import ReservationPrice from "@/app/feature/reservation/components/reservation-price";
 
 const ReservationConfirm = () => {
   const { handleSubmit, reset, formState } = useFormContext<ReservationFormData>();
@@ -25,7 +26,7 @@ const ReservationConfirm = () => {
         <p>roomType</p>
         <p>adults plus kids</p>
         <p>insurance</p>
-        <p>К оплате <span>1 234 ₽</span></p>
+        <ReservationPrice title='К оплате'/>
       </div>
       <div className='flex justify-between'>
         <Link
