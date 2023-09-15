@@ -17,6 +17,10 @@ const ReservationRoom = () => {
   const reservationRoomFormErrors = pickFieldsFromObj(errors, ["adults", "childrenUnder5", "children5to12", "roomType", "nights", "insurance"]);
   const router = useRouter();
   const updateFields = useReservationData(state => state.updateFields);
+  const roomType = useReservationData(state => state.reservationData.roomType);
+  const insurance = useReservationData(state => state.reservationData.insurance);
+  console.log('reservationRoomFormErrors', reservationRoomFormErrors)
+  console.log('roomType', roomType)
 
   const nextStep = async () => {
     const isValid = await trigger(["adults", "childrenUnder5", "children5to12", "roomType", "nights", "insurance"]);
@@ -37,7 +41,7 @@ const ReservationRoom = () => {
               type="number"
               id="adults"
               {...field}
-              value={field.value || ''}
+              min='0'
               onChange={(e) => {
                 const field = {
                   [e.target.name]: parseInt(e.target.value),
@@ -64,7 +68,7 @@ const ReservationRoom = () => {
               type="number"
               id="children5to12"
               {...field}
-              value={field.value || ''}
+              min='0'
               onChange={(e) => {
                 const field = {
                   [e.target.name]: parseInt(e.target.value),
@@ -91,7 +95,7 @@ const ReservationRoom = () => {
               type="number"
               id="childrenUnder5"
               {...field}
-              value={field.value || ''}
+              min='0'
               onChange={(e) => {
                 const field = {
                   [e.target.name]: parseInt(e.target.value),
@@ -108,43 +112,87 @@ const ReservationRoom = () => {
         {errors.childrenUnder5 && <span className="text-sm text-red-500">{errors.childrenUnder5.message}</span>}
       </div>
       <div className="mb-4">
+        <p className="mb-1 font-medium text-gray-700">Тип номера</p>
         <Controller
           name="roomType"
           control={control}
-          render={({ field }) => (
-            <>
-              <span className="block mb-1 font-medium text-gray-700">Тип номера</span>
-              <div className="flex items-center space-x-4">
-                <label htmlFor="roomType-economy" className="flex items-center space-x-2">
-                  <input type="radio" id="roomType-economy" {...field} value="Эконом" onChange={(e) => {
+          defaultValue='Эконом'
+          render={({ field }) => {
+            return (
+              <label htmlFor="roomType-economy" className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  id="roomType-economy"
+                  {...field}
+                  defaultChecked={roomType === 'Эконом'}
+                  value={'Эконом'}
+                  onChange={(e) => {
                     const field = {
                       [e.target.name]: e.target.value,
                     };
+                    setValue('roomType', 'Эконом');
                     updateFields(field);
-                  }} className="mr-2"/>
-                  <span>Эконом</span>
-                </label>
-                <label htmlFor="roomType-standard" className="flex items-center space-x-2">
-                  <input type="radio" id="roomType-standard" {...field} value="Стандарт" onChange={(e) => {
+                  }}
+                  className="mr-2"
+                />
+                <span>Эконом</span>
+              </label>
+            )
+          }}
+        />
+        <Controller
+          name="roomType"
+          control={control}
+          render={({ field }) => {
+            return (
+              <label htmlFor="roomType-standard" className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  id="roomType-standard"
+                  {...field}
+                  defaultChecked={roomType === 'Стандарт'}
+                  value={'Стандарт'}
+                  onChange={(e) => {
                     const field = {
                       [e.target.name]: e.target.value,
                     };
+                    setValue('roomType', 'Стандарт');
                     updateFields(field);
-                  }} className="mr-2"/>
-                  <span>Стандарт</span>
-                </label>
+                  }}
+                  className="mr-2"
+                />
+                <span>Стандарт</span>
+              </label>
+            )
+          }}
+        />
+        <Controller
+          name="roomType"
+          control={control}
+          render={({ field }) => {
+            return (
+              <>
                 <label htmlFor="roomType-luxury" className="flex items-center space-x-2">
-                  <input type="radio" id="roomType-luxury" {...field} value="Люкс" onChange={(e) => {
-                    const field = {
-                      [e.target.name]: e.target.value,
-                    };
-                    updateFields(field);
-                  }} className="mr-2"/>
+                  <input
+                    type="radio"
+                    id="roomType-luxury"
+                    {...field}
+                    defaultChecked={roomType === 'Люкс'}
+                    value={'Люкс'}
+                    onChange={(e) => {
+                      const field = {
+                        [e.target.name]: e.target.value,
+                      };
+                      setValue('roomType', 'Люкс');
+                      updateFields(field);
+                    }}
+                    className="mr-2"
+                  />
                   <span>Люкс</span>
                 </label>
-              </div>
-            </>
-          )}
+              </>
+            )
+          }}
         />
         {errors.roomType && <span className="text-sm text-red-500">{errors.roomType.message}</span>}
       </div>
@@ -158,7 +206,7 @@ const ReservationRoom = () => {
               type="number"
               id="nights"
               {...field}
-              value={field.value || ''}
+              min='0'
               onChange={(e) => {
                 const field = {
                   [e.target.name]: parseInt(e.target.value),
@@ -184,6 +232,7 @@ const ReservationRoom = () => {
               <label htmlFor="insurance" className="inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox" id="insurance" {...field}
+                  checked={insurance}
                   value={field.value?.toString() || ''}
                   onChange={(e) => {
                     const field = {

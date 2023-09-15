@@ -15,11 +15,11 @@ type ReservationState = {
 
 export const useReservationData = create<ReservationState>()(immer(set => ({
   reservationData: {
-    adults: 1,
+    adults: 0,
     children5to12: 0,
     childrenUnder5: 0,
     roomType: 'Эконом',
-    nights: 1,
+    nights: 0,
     insurance: false,
     surname: '',
     name: '',
