@@ -12,7 +12,7 @@ const ReservationRoom = () => {
     trigger,
   } = useFormContext<ReservationFormData>()
   const { errors } = formState;
-  const reservationFormErrors = pickFieldsFromObj(errors, ["adults", "childrenUnder5", "children5to12", "roomType", "nights", "insurance"]);
+  const reservationRoomFormErrors = pickFieldsFromObj(errors, ["adults", "childrenUnder5", "children5to12", "roomType", "nights", "insurance"]);
   const router = useRouter();
 
   const nextStep = async () => {
@@ -161,7 +161,7 @@ const ReservationRoom = () => {
       <button
         onClick={nextStep}
         type="button"
-        className={`w-full py-2 text-white bg-blue-500 rounded-md ${Object.keys(reservationFormErrors).length
+        className={`w-full py-2 text-white bg-blue-500 rounded-md ${Object.keys(reservationRoomFormErrors).length
           ? 'opacity-50 cursor-not-allowed'
           : ''}`}>Далее
       </button>

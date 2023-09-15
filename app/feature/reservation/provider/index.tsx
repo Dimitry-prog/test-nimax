@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 const ReservationFormProvider = ({ children }: {
   children: ReactNode
 }) => {
-  const methods = useForm<Partial<ReservationFormData>>({
+  const methods = useForm<ReservationFormData>({
     mode: "all",
     resolver: zodResolver(reservationSchema),
   });

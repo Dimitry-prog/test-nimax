@@ -12,9 +12,9 @@ const ReservationLayout = ({ children }: {
 }) => {
   return (
     <section>
-      <h2>TITLE</h2>
-      <ReservationFormProvider>{children}</ReservationFormProvider>
-      <p>NAVAGATION</p>
+      <ReservationFormProvider>
+        {children}
+      </ReservationFormProvider>
     </section>
   )
 };

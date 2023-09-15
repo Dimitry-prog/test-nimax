@@ -6,7 +6,7 @@ const Success = () => {
     <div>
       <Image src='/Vector.png' alt='success' width={134} height={134} className='mx-auto'/>
       <h2>Заказ успешно оплачен.</h2>
-      <Link href='/reservation-room'>Забронировать еще</Link>
+      <Link href='/reservation'>Забронировать еще</Link>
     </div>
   )
 };
