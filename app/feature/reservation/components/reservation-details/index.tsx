@@ -3,8 +3,9 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { ReservationFormData } from "@/app/feature/reservation/validation";
 import { pickFieldsFromObj } from "@/app/utils/pickFieldsFromObj";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useReservationData } from "@/app/feature/reservation/store";
+import Input from "@/app/components/ui/input";
+import Button from "@/app/components/ui/button";
 
 const ReservationDetails = () => {
   const {
@@ -25,151 +26,142 @@ const ReservationDetails = () => {
     }
   };
 
+  const backStep = () => {
+    router.back();
+  };
+
   return (
-    <form className="max-w-xl mx-auto">
-      <div className="mb-4">
-        <label htmlFor="surname" className="block mb-1 font-medium text-gray-700">Фамилия</label>
-        <Controller
-          name="surname"
-          control={control}
-          render={({ field }) => (
-            <input
-              type="text"
-              id="surname"
-              {...field}
-              value={field.value || ''}
-              onChange={(e) => {
-                const field = {
-                  [e.target.name]: e.target.value,
-                };
-                setValue('surname', e.target.value);
-                updateFields(field);
-              }}
-              className={`w-full px-3 py-2 border rounded-md ${errors.surname
-                ? 'border-red-500'
-                : 'border-gray-300'}`}
-            />
-          )}
-        />
-        {errors.surname && <span className="text-sm text-red-500">{errors.surname.message}</span>}
+    <form className="h-full flex flex-col gap-6">
+      <h3 className='text-lg font-medium'>Расчет стоимости</h3>
+      <div className='grow flex flex-col gap-6'>
+        <div className="grid gap-1 sm:grid-cols-2 items-center">
+          <Controller
+            name="surname"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label='Фамилия'
+                type="text"
+                {...field}
+                // value={field.value || ''}
+                onChange={(e) => {
+                  const field = {
+                    [e.target.name]: e.target.value,
+                  };
+                  setValue('surname', e.target.value);
+                  updateFields(field);
+                }}
+                error={errors.surname?.message}
+              />
+            )}
+          />
+        </div>
+        <div className="grid gap-1 sm:grid-cols-2 items-center">
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label='Имя'
+                type="text"
+                {...field}
+                // value={field.value || ''}
+                onChange={(e) => {
+                  const field = {
+                    [e.target.name]: e.target.value,
+                  };
+                  setValue('name', e.target.value);
+                  updateFields(field);
+                }}
+                error={errors.name?.message}
+              />
+            )}
+          />
+        </div>
+        <div className="grid gap-1 sm:grid-cols-2 items-center">
+          <Controller
+            name="patronymic"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label='Отчество'
+                type="text"
+                {...field}
+                // value={field.value || ''}
+                onChange={(e) => {
+                  const field = {
+                    [e.target.name]: e.target.value,
+                  };
+                  setValue('patronymic', e.target.value);
+                  updateFields(field);
+                }}
+                error={errors.patronymic?.message}
+              />
+            )}
+          />
+        </div>
+        <div className="grid gap-1 sm:grid-cols-2 items-center">
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label='Номер телефона'
+                type="text"
+                placeholder="+7 987 654 32-10"
+                {...field}
+                // value={field.value || ''}
+                onChange={(e) => {
+                  const field = {
+                    [e.target.name]: e.target.value,
+                  };
+                  setValue('phone', e.target.value);
+                  updateFields(field);
+                }}
+                error={errors.phone?.message}
+              />
+            )}
+          />
+        </div>
+        <div className="grid gap-1 sm:grid-cols-2 items-center">
+          <Controller
+            name="birthday"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label='Дата рождения'
+                type="date"
+                {...field}
+                value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
+                onChange={(e) => {
+                  const field = {
+                    [e.target.name]: e.target.value,
+                  };
+                  setValue('birthday', new Date(e.target.value));
+                  updateFields(field);
+                }}
+                error={errors.birthday?.message}
+              />
+            )}
+          />
+        </div>
       </div>
-      <div className="mb-4">
-        <label htmlFor="name" className="block mb-1 font-medium text-gray-700">Имя</label>
-        <Controller
-          name="name"
-          control={control}
-          render={({ field }) => (
-            <input
-              type="text"
-              id="name"
-              {...field}
-              value={field.value || ''}
-              onChange={(e) => {
-                const field = {
-                  [e.target.name]: e.target.value,
-                };
-                setValue('name', e.target.value);
-                updateFields(field);
-              }}
-              className={`w-full px-3 py-2 border rounded-md ${errors.name
-                ? 'border-red-500'
-                : 'border-gray-300'}`}
-            />
-          )}
-        />
-        {errors.name && <span className="text-sm text-red-500">{errors.name.message}</span>}
-      </div>
-      <div className="mb-4">
-        <label htmlFor="patronymic" className="block mb-1 font-medium text-gray-700">Отчество</label>
-        <Controller
-          name="patronymic"
-          control={control}
-          render={({ field }) => (
-            <input
-              type="text"
-              id="patronymic"
-              {...field}
-              value={field.value || ''}
-              onChange={(e) => {
-                const field = {
-                  [e.target.name]: e.target.value,
-                };
-                setValue('patronymic', e.target.value);
-                updateFields(field);
-              }}
-              className={`w-full px-3 py-2 border rounded-md ${errors.patronymic
-                ? 'border-red-500'
-                : 'border-gray-300'}`}
-            />
-          )}
-        />
-        {errors.patronymic && <span className="text-sm text-red-500">{errors.patronymic.message}</span>}
-      </div>
-      <div className="mb-4">
-        <label htmlFor="phone" className="block mb-1 font-medium text-gray-700">Номер телефона</label>
-        <Controller
-          name="phone"
-          control={control}
-          render={({ field }) => (
-            <input
-              type="tel"
-              id="phone"
-              {...field}
-              value={field.value || ''}
-              onChange={(e) => {
-                const field = {
-                  [e.target.name]: e.target.value,
-                };
-                setValue('phone', e.target.value);
-                updateFields(field);
-              }}
-              className={`w-full px-3 py-2 border rounded-md ${errors.phone
-                ? 'border-red-500'
-                : 'border-gray-300'}`}
-            />
-          )}
-        />
-        {errors.phone && <span className="text-sm text-red-500">{errors.phone.message}</span>}
-      </div>
-      <div className="mb-4">
-        <label htmlFor="birthday" className="block mb-1 font-medium text-gray-700">Дата рождения</label>
-        <Controller
-          name="birthday"
-          control={control}
-          render={({ field }) => (
-            <input
-              type="date"
-              id="birthday"
-              {...field}
-              value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
-              onChange={(e) => {
-                const field = {
-                  [e.target.name]: e.target.value,
-                };
-                setValue('birthday', new Date(e.target.value));
-                updateFields(field);
-              }}
-              className={`w-full px-3 py-2 border rounded-md ${errors.birthday
-                ? 'border-red-500'
-                : 'border-gray-300'}`}
-            />
-          )}
-        />
-        {errors.birthday && <span className="text-sm text-red-500">{errors.birthday.message}</span>}
-      </div>
-      <div className='flex justify-between'>
-        <Link
-          href='/reservation'
-          className={`w-full py-2 text-white bg-blue-500 rounded-md`}>
+      <div className='flex flex-col sm:flex-row gap-2 justify-between'>
+        <Button
+          onClick={backStep}
+          type="button"
+          classes='self-start sm:max-w-[250px] bg-white text-black hover:text-white'
+        >
           Назад к расчету стоимости
-        </Link>
-        <button
+        </Button>
+        <Button
           onClick={nextStep}
           type="button"
-          className={`w-full py-2 text-white bg-blue-500 rounded-md ${Object.keys(reservationDetailsFormErrors).length
-            ? 'opacity-50 cursor-not-allowed'
-            : ''}`}>Далее
-        </button>
+          disabled={Boolean(Object.keys(reservationDetailsFormErrors).length)}
+          classes='self-end sm:max-w-[128px] order-first sm:order-2 '
+        >
+          Далее
+        </Button>
       </div>
     </form>
   );
