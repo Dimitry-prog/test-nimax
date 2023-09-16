@@ -21,11 +21,22 @@ const ReservationConfirm = () => {
   const children5to12 = useReservationData(state => state.reservationData.children5to12);
   const childrenUnder5 = useReservationData(state => state.reservationData.childrenUnder5);
   const fullName = `${surname} ${name} ${patronymic}`
-  const onSubmit: SubmitHandler<ReservationFormData> = (data) => {
-    console.log('data', data);
-    if (formState.isValid) {
-      router.push('/reservation/success');
+
+  const onSubmit: SubmitHandler<ReservationFormData> = async (data) => {
+    try {
+      const response = await fetch("/api/reservation-order", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+      console.log('result', result);
+      router.replace('/reservation/success');
       reset();
+    } catch (e) {
+      console.log(e)
     }
   };
 
@@ -34,32 +45,35 @@ const ReservationConfirm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="h-full flex flex-col gap-6">
-      <h3 className='text-lg font-medium'>Подтверждение заказа</h3>
-      <div className='flex flex-col gap-[6px] grow'>
-        <p className='text-sm font-semibold'>{fullName}</p>
-        <p>{phone}</p>
-        <p>Номер «{roomType}» на {nights} ночей</p>
-        <p>{adults} взрослых, {children5to12} ребенка от 12 лет и {childrenUnder5} ребенок младше 12 лет</p>
-        <p className='mb-3.5'>{insurance ? 'Страховка включена' : 'Без страховки'}</p>
-        <ReservationPrice title='К оплате' confirm/>
-      </div>
-      <div className='flex flex-col sm:flex-row gap-2 justify-between'>
-        <Button
-          onClick={backStep}
-          type="button"
-          classes='self-start sm:max-w-[252px] bg-white text-black hover:text-white'
-        >
-          Назад к данным покупателя
-        </Button>
-        <Button
-          type="submit"
-          classes='self-end sm:max-w-[128px] order-first sm:order-2 '
-        >
-          Оплатить
-        </Button>
-      </div>
-    </form>
+    <>
+      <h2 className='text-2xl font-bold'>Бронирование номера</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="h-full flex flex-col gap-6">
+        <h3 className='text-lg font-medium'>Подтверждение заказа</h3>
+        <div className='flex flex-col gap-[6px] grow'>
+          <p className='text-sm font-semibold'>{fullName}</p>
+          <p>{phone}</p>
+          <p>Номер «{roomType}» на {nights} ночей</p>
+          <p>{adults} взрослых, {children5to12} ребенка от 12 лет и {childrenUnder5} ребенок младше 12 лет</p>
+          <p className='mb-3.5'>{insurance ? 'Страховка включена' : 'Без страховки'}</p>
+          <ReservationPrice title='К оплате' confirm/>
+        </div>
+        <div className='flex flex-col sm:flex-row gap-2 justify-between'>
+          <Button
+            onClick={backStep}
+            type="button"
+            classes='self-start sm:max-w-[252px] bg-white text-black hover:text-white'
+          >
+            Назад к данным покупателя
+          </Button>
+          <Button
+            type="submit"
+            classes='self-end sm:max-w-[128px] order-first sm:order-2 '
+          >
+            Оплатить
+          </Button>
+        </div>
+      </form>
+    </>
   )
 };
 

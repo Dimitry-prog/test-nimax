@@ -11,12 +11,12 @@ type CheckboxProps = {
 
 const Checkbox = ({ name, type, placeholder, onChange, error, classes, ...restProps }: CheckboxProps) => {
   return (
-    <div className="flex gap-2">
+    <div className={cn("flex gap-2", classes)}>
       <input
         name={name}
         type={type}
         onChange={onChange}
-        className={cn('relative peer shrink-0 appearance-none w-4 h-4 border border-black bg-white checked:border-0', classes)}
+        className={cn('relative peer shrink-0 appearance-none w-4 h-4 border border-black bg-white checked:border-0')}
         {...restProps}
       />
       <svg

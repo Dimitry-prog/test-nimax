@@ -12,7 +12,6 @@ const ReservationLayout = ({ children }: {
 }) => {
   return (
     <section className='max-w-[660px] h-[700px] p-[10px] mx-auto sm:px-5 sm:py-4 flex flex-col gap-2'>
-      <h2 className='text-2xl font-bold'>Бронирование номера</h2>
       <ReservationFormProvider>
         {children}
       </ReservationFormProvider>
